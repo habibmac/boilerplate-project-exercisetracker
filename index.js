@@ -48,6 +48,13 @@ app.post('/api/users/:_id/exercises', urlencodedParser, async (req, res) => {
   res.json(exercise);
 });
 
+// get all users
+app.get('/api/users', async (req, res) => {
+  // get all users
+  const users = await User.find();
+  res.json(users);
+});
+
 // get user's exercise log
 app.get('/api/users/:_id/logs', async (req, res) => {
   // get user id from request parameters
