@@ -11,6 +11,6 @@ const exerciseSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now },
 });
 
-const Exercise = mongoose.model("Exercise", exerciseSchema);
+const Exercise = mongoose.model("Exercise", exerciseSchema, 'exercise-tracker-fcc');
 
 module.exports = Exercise;
