@@ -35,17 +35,32 @@ app.post('/api/users', urlencodedParser, async (req, res) => {
 
 // add exercise to user
 app.post('/api/users/:_id/exercises', urlencodedParser, async (req, res) => {
-  // get user id from request parameters
-  const { _id } = req.params;
-  // get exercise details from request body
+  // get request params
+  const { _id } = req.params; 
   const { description, duration, date } = req.body;
 
-  // get user
-  const user = await User.findById(_id);
-  // create new exercise
-  const exercise = new Exercise({ user, description, duration, date });
-  await exercise.save();
-  res.json(exercise);
+  // get user by id
+  try {
+    const user = await User.findById(_id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // create new exercise 
+    const exercise = new Exercise({ user, description, duration, date });
+    await exercise.save();
+
+    // return response
+    res.json({
+      _id: user._id,
+      username: user.username,
+      date: exercise.date.toDateString(), 
+      duration: exercise.duration,
+      description: exercise.description
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // get all users
