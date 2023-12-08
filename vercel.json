@@ -9,7 +9,7 @@
     "routes": [
         {
             "src": "/api/users",
-            "dest": "/api/users.js",
+            "destination": "index.js",
             "methods": [
                 "GET",
                 "POST"
@@ -17,7 +17,7 @@
         },
         {
             "src": "/api/users/:id",
-            "dest": "/api/users/[id].js",
+            "destination": "index.js",
             "methods": [
                 "GET",
                 "POST",
@@ -27,7 +27,7 @@
         },
         {
             "src": "/api/users/:id/exercises",
-            "dest": "/api/users/[id]/exercises.js",
+            "destination": "index.js",
             "methods": [
                 "GET",
                 "POST"
@@ -35,7 +35,7 @@
         },
         {
             "src": "/(.*)",
-            "dest": "/index.js"
+            "destination": "index.js"
         }
     ],
     "headers": [
