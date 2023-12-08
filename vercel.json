@@ -6,41 +6,49 @@
             "use": "@vercel/node"
         }
     ],
-    "routes": [
+    "rewrites": [
         {
-            "src": "/api/users",
-            "destination": "index.js",
-            "methods": [
-                "GET",
-                "POST"
-            ]
+            "source": "/api/users",
+            "destination": "index.js"
         },
         {
-            "src": "/api/users/:id",
-            "destination": "index.js",
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE"
-            ]
+            "source": "/api/users/:_id",
+            "destination": "index.js"
         },
         {
-            "src": "/api/users/:id/exercises",
-            "destination": "index.js",
-            "methods": [
-                "GET",
-                "POST"
-            ]
+            "source": "/api/users/:_id/exercises",
+            "destination": "index.js"
         },
         {
-            "src": "/(.*)",
+            "source": "/api/users/:_id/logs",
             "destination": "index.js"
         }
-    ],
+
+    ], 
     "headers": [
         {
-            "source": "/api/(.*)",
+            "source": "/api/users",
+            "headers": [
+                {
+                    "key": "Access-Control-Allow-Credentials",
+                    "value": "true"
+                },
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                },
+                {
+                    "key": "Access-Control-Allow-Methods",
+                    "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+                },
+                {
+                    "key": "Access-Control-Allow-Headers",
+                    "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+                }
+            ]
+        },
+        {
+            "source": "/api/users/(.*)",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Credentials",
