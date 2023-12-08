@@ -79,44 +79,38 @@ app.get('/api/users/:_id/logs', async (req, res) => {
   // get limit query parameter
   const limit = parseInt(req.query.limit);
 
-  try {
-    // get user
-    const user = await User.findById(_id);
+  // get user
+  const user = await User.findById(_id);
+  // get user's exercises
+  let exercises = await Exercise.find({ user });
 
-    // filter exercises by date range using from and to query conditions
-    let queryConditions = { username: user.username };
-    if (from) {
-        queryConditions.date = {
-            ...queryConditions.date,
-            $gte: new Date(from),
-        };
-    }
-    if (to) {
-        queryConditions.date = { ...queryConditions.date, $lte: new Date(to) };
-    }
-
-    // get user's exercises
-    let exercises = await Exercise.find(queryConditions)
-        .limit(limit ? limit : 0)
-        .exec();
-
-    // map exercises to return object with date string
-    exercises = exercises.map(exercise => ({
-      description: exercise.description,
-      duration: exercise.duration,
-      date: exercise.date.toDateString()
-    }));
-
-    // return response
-    res.json({
-        _id: user._id,
-        username: user.username,
-        count: exercises.length,
-        log: exercises,
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  // filter exercises by date range
+  if (from) {
+    const fromDate = new Date(from);
+    exercises = exercises.filter(exercise => exercise.date >= fromDate);
   }
+  if (to) {
+    const toDate = new Date(to);
+    exercises = exercises.filter(exercise => exercise.date <= toDate);
+  }
+
+  // limit exercises
+  if (limit) {
+    exercises = exercises.slice(0, limit);
+  }
+
+  // add count property to exercises
+  const count = exercises.length;
+
+  // dirty!
+  exercises = exercises.map(exercise => ({
+    description: exercise.description,
+    duration: exercise.duration,
+    date: exercise.date.toDateString()
+  }));
+
+  // return response
+  res.json({ _id, username: user.username, count, log: exercises });
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {
