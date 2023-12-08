@@ -6,40 +6,41 @@
             "use": "@vercel/node"
         }
     ],
-    "rewrites": [
+    "routes": [
         {
-            "source": "/api/users",
-            "destination": "index.js"
-        },
-        {
-            "source": "/api/users/:_id",
-            "destination": "index.js"
-        }
-    ], 
-    "headers": [
-        {
-            "source": "/api/users",
-            "headers": [
-                {
-                    "key": "Access-Control-Allow-Credentials",
-                    "value": "true"
-                },
-                {
-                    "key": "Access-Control-Allow-Origin",
-                    "value": "*"
-                },
-                {
-                    "key": "Access-Control-Allow-Methods",
-                    "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
-                },
-                {
-                    "key": "Access-Control-Allow-Headers",
-                    "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-                }
+            "src": "/api/users",
+            "dest": "/api/users.js",
+            "methods": [
+                "GET",
+                "POST"
             ]
         },
         {
-            "source": "/api/users/(.*)",
+            "src": "/api/users/:id",
+            "dest": "/api/users/[id].js",
+            "methods": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
+        },
+        {
+            "src": "/api/users/:id/exercises",
+            "dest": "/api/users/[id]/exercises.js",
+            "methods": [
+                "GET",
+                "POST"
+            ]
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/index.js"
+        }
+    ],
+    "headers": [
+        {
+            "source": "/api/(.*)",
             "headers": [
                 {
                     "key": "Access-Control-Allow-Credentials",
